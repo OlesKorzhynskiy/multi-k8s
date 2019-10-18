@@ -1,0 +1,24 @@
+sudo: required
+language: generic
+
+services:
+  - docker
+
+before_install:
+  - docker build -t korzhynskiy/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true korzhynskiy/react-test npm run test
+
+after_success:
+  - docker build -t korzhynskiy/multi-client ./client
+  - docker build -t korzhynskiy/multi-nginx ./nginx
+  - docker build -t korzhynskiy/multi-server ./server
+  - docker build -t korzhynskiy/multi-worker ./worker
+  # Log in to the docker CLI
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin
+  # Take those images and push them to docker hub
+  - docker push korzhynskiy/multi-client
+  - docker push korzhynskiy/multi-nginx
+  - docker push korzhynskiy/multi-server
+  - docker push korzhynskiy/multi-worker
