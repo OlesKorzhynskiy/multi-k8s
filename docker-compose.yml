@@ -3,6 +3,13 @@ version: "3"
 services:
   postgres:
     image: 'postgres:latest'
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_PASSWORD: postgres_password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+
   redis:
     image: 'redis:latest'
   nginx:

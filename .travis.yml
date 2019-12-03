@@ -1,12 +1,16 @@
-sudo: required
+sudo: required #super user level permission
 language: generic
 
+# install Docker for us
 services:
   - docker
 
+  # build our image in the beginning
 before_install:
   - docker build -t korzhynskiy/react-test -f ./client/Dockerfile.dev ./client
 
+# commands that should be executed
+# we use "-e CI=true" in order to show that it will be run in CI 
 script:
   - docker run -e CI=true korzhynskiy/react-test npm run test
 
