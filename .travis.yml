@@ -24,7 +24,7 @@ before_install:
     - docker build -t korzhynskiy/react-test -f ./client/Dockerfile.dev ./client # build image
 
 script:
-    - docker run -e CI=true korzhynskiy/docker-react npm run test
+    - docker run -e CI=true korzhynskiy/react-test npm run test
 
 deploy:
     provider: script # we don't have provider, so we use script
