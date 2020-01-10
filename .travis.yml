@@ -1,0 +1,33 @@
+sudo: required
+
+services:
+    - docker
+
+env:
+    global:
+        - GIT_SHA=$(git rev-parse HEAD) # set a new env. variable that is taken from git command
+        - CLOUDSDK_CORE_DISABLE_PROMPTS=1 # when gcloud auth command runs do not give any prompts to us, as we can't answer there
+
+before_install:
+    - openssl aes-256-cbc -K $encrypted_0c35eebf403c_key -iv $encrypted_0c35eebf403c_iv -in service-account.json.enc -out service-account.json -d # was generated from service-acount file
+    - curl https://sdk.cloud.google.com | bash > /dev/null; # install google cloud sdk
+    - source $HOME/google-cloud-sdk/path.bash.inc # go to GC directory and execute "path.bash.inc" file
+    - gcloud components update kubectl # install kubectl inside Travis environment
+    - gcloud auth activate-service-account --key-file service-account.json  # authorize to GC
+    # this activate-service-account is similar to IAM on AWS
+    # we have to activate it and then provide credentials
+    - gcloud config set project multi-k8s-264712 # specify the project
+    - gcloud config set compute/zone europe-north1-b # specify the zone
+    - gcloud container clusters get-credentials multi-cluster # specify the cluster
+
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # login to Docker Hub
+    - docker build -t korzhynskiy/react-test -f ./client/Dockerfile.dev ./client # build image
+
+script:
+    - docker run -e CI=true korzhynskiy/docker-react npm run test
+
+deploy:
+    provider: script # we don't have provider, so we use script
+    script: bash ./deploy.sh # use this script
+    on:
+        branch: master
