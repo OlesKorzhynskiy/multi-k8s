@@ -16,7 +16,7 @@ before_install:
     - gcloud auth activate-service-account --key-file service-account.json  # authorize to GC
     # this activate-service-account is similar to IAM on AWS
     # we have to activate it and then provide credentials
-    - gcloud config set project multi-k8s-264712 # specify the project
+    - gcloud config set project my-p-265010 # specify the project
     - gcloud config set compute/zone europe-north1-b # specify the zone
     - gcloud container clusters get-credentials multi-cluster # specify the cluster
 
