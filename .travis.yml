@@ -20,7 +20,7 @@ before_install:
     - gcloud config set compute/zone europe-north1-b # specify the zone
     - gcloud container clusters get-credentials multi-cluster # specify the cluster
 
-    # - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # login to Docker Hub
+    - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin # login to Docker Hub
     # - docker build -t korzhynskiy/react-test -f ./client/Dockerfile.dev ./client # build image
 
 # script:
