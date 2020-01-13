@@ -4,13 +4,17 @@ metadata:
     name: kubernetes-test-cf-tls # domain name - tls
 spec:
     secretName: kubernetes-test-cf # related to our domain (can be replaced with any domain name)
-    issuerRef: 
-        name: letsencrypt-prod
-        kind: ClusterIssuer
+    duration: 2160h # 90d
+    renewBefore: 360h # 15d
+    organization:
+        - jetstack
     commonName: kubernetes-test.cf # domain name
     dnsNames:
         - kubernetes-test.cf
         - www.kubernetes-test.cf
+    issuerRef: 
+        name: letsencrypt-prod
+        kind: ClusterIssuer
     acme:
         config:
             - http01:
@@ -18,3 +22,7 @@ spec:
               domains:
                 - kubernetes-test.cf
                 - www.kubernetes-test.cf
+
+    
+    
+    
