@@ -7,5 +7,10 @@ spec:
         server: https://acme-v02.api.letsencrypt.org/directory
         email: 'oles.korzhynskiy@gmail.com'
         privateKeySecretRef:
-            name: letsencrypt-prod
+            name: letsencrypt-private-key
         http01: {} # there are 2 options: http or dns
+        solvers:
+            - http01:
+                ingress:
+                  class: nginx
+              selector: {}
